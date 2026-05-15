@@ -4,8 +4,9 @@
 
 ```
 src/
-  data.py       — dataset fetch, scaling, train/test split   [done]
-  physics.py    — bounds, tanh projection, energy routing
+  data.py       — dataset fetch, train/test split            [done]
+  prepare.py    — StandardScaler fit, scaler save, returns scaled + physical arrays  [done]
+  physics.py    — bounds, tanh projection, energy routing    [done]
   model.py      — MLP definition, triple norm computation
   train.py      — training loop, L1 penalty, norm logging
   attack.py     — CW-L1 attack with binary search over c
@@ -47,15 +48,18 @@ enforce_conservation(x) -> x     # sets x[p1] = -(x[p2]+x[p3]+x[p4]) in-place
 
 ```python
 class GridMLP(nn.Module):
-    # layers: Linear(12,64) -> ReLU -> Linear(64,64) -> ReLU
-    #         -> Linear(64,32) -> ReLU -> Linear(32,1)
+    # layers: Linear(12,64) -> Softplus -> Linear(64,32) -> Softplus -> Linear(32,1)
     # forward returns scalar logit (no sigmoid — BCEWithLogitsLoss in train.py)
     # receives scaled inputs
 
 compute_triple_norm(model) -> list[float]
     # per Linear layer: max_j sum_i |w_ij|
-    # returns one value per layer (4 values for this architecture)
+    # returns one value per layer (3 values for this architecture)
 ```
+
+Activation: **Softplus** (`nn.Softplus()`). Gradient is sigmoid(x) — smooth, always positive, no dead
+neurons. Well-conditioned for gradient-based attack optimisation. Two hidden layers give a gradient
+product of ~0.25 at init (inputs standardised, weights near zero) — no vanishing.
 
 Both Model A and B use the same class; regularization differs only in the training loop.
 
@@ -72,7 +76,7 @@ train(
     l1_lambda=0.0,    # 0.0 for Model A (L2 via weight_decay), >0 for Model B
     weight_decay=0.0, # passed to Adam; non-zero for Model A only
     epochs, lr, batch_size,
-) -> pd.DataFrame   # columns: epoch, layer_0_tnorm…layer_3_tnorm, train_loss, val_loss
+) -> pd.DataFrame   # columns: epoch, layer_0_tnorm…layer_2_tnorm, train_loss, val_loss
 ```
 
 L1 penalty applied manually each step:
