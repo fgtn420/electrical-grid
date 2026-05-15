@@ -26,6 +26,10 @@ All entries are added here as they are introduced during implementation. This is
 
 <!-- Add entries here as libraries are imported for the first time. Include version numbers. -->
 
+- **ucimlrepo** — fetches UCI datasets by ID; used to load the Electrical Grid Stability dataset.
+- **scikit-learn** — `train_test_split` for stratified train/test splitting.
+- **numpy** — array handling and type casting.
+
 
 
 ## Adapted code and other resources

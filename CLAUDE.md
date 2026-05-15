@@ -22,6 +22,7 @@ These must never be violated:
 ## Code standards
 
 - Keep a modular structure, no god-files, clean separations and organized structure.
+- No over-engineering, no error handling, no planning for the future. This is a one-time results-based project.
 - If a library exists that cleanly handles a task, use it. Don't reimplement what's already well-solved.
 - Minimal inline comments. Only comment why, never what.
 - Separate documentation files for bigger parts of the repo for implementation reference.

@@ -1,0 +1,22 @@
+
+# DO BEFORE — pick one:
+# CUDA 12.4 (NVIDIA GPU, driver >= 550):
+#   pip install torch==2.6.0+cu124 --index-url https://download.pytorch.org/whl/cu124
+# CUDA 11.8:
+#   pip install torch==2.6.0+cu118 --index-url https://download.pytorch.org/whl/cu118
+# CPU only:
+#   pip install torch==2.6.0+cpu --index-url https://download.pytorch.org/whl/cpu
+
+# DO AFTER
+# pip install -r requirements.txt
+
+torch==2.6.0+cu124  # REPLACE suffix to match your install above
+numpy==2.2.6
+pandas==3.0.3
+pyarrow==24.0.0
+scikit-learn==1.8.0
+scipy==1.17.1
+matplotlib==3.9.2
+numexpr==2.14.1
+bottleneck==1.6.0
+ucimlrepo==0.0.7
